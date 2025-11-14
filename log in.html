@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mang Inasal Worker Login</title>
+  <style>
+    body {
+      background-image: url('nice.webp');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+      width: 320px;
+      text-align: center;
+    }
+    .login-container h2 {
+      color: #00d33f;
+      margin-bottom: 25px;
+      font-weight: 700;
+    }
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #333;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #00d335;
+      outline: none;
+    }
+    button {
+      background-color: #00d32e;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      font-size: 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #22e643;
+    }
+    .error {
+      color: #c0392b;
+      margin-bottom: 15px;
+      font-weight: 600;
+      display: none;
+    }
+    .admin-btn {
+      margin-top: 10px;
+      background-color: #0078d7;
+    }
+    .admin-btn:hover {
+      background-color: #1990ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Worker Login</h2>
+    <div id="errorMsg" class="error"></div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username or Email</label>
+        <input type="text" id="username" name="username" placeholder="Enter username or email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter password" required />   
+   <button type="button" onclick="window.location.href='dashboard.html'">Log In</button>
+    </form>
+    <button class="admin-btn" type="button" onclick="window.location.href='admin.html'">Log in as Admin</button>
+  </div>
+</body>
+</html>
