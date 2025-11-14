@@ -1,0 +1,189 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mang Inasal Worker Account</title>
+    <style>
+    body{background-image: url('mang-juan.webp');
+         background-repeat:no-repeat ;
+         background-size: cover;
+         background-attachment: fixed ;}
+
+  </style>
+ </head>
+ <body>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff7e6;
+      margin: 0;
+      padding: 20px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1, h2 {
+      color: #00d31c;
+      text-align: center;
+    }
+    .profile {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .profile p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    .balance {
+      font-size: 24px;
+      font-weight: 700;
+      color: #27ae60;
+      margin: 10px 0 20px;
+    }
+    .attendance {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    #qrCode {
+      margin: 20px auto;
+      width: 160px;
+      height: 160px;
+    }
+    button {
+      background-color: #00d323;
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background-color 0.3s;
+      margin-top: 15px;
+    }
+    button:hover {
+      background-color: #22e643;
+    }
+    .attendance-log {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 20px;
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+      font-family: monospace;
+      background-color: #fdf6e3;
+      border-radius: 5px;
+    }
+    .attendance-log p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mang Inasal Worker Account</h1>
+
+  <section class="profile">
+    <h2>Worker Profile</h2>
+    <p><strong>Name:</strong> Justine Angeles</p>
+    <p><strong>Position:</strong> Crew</p>
+    <p class="balance"><strong>Balance:</strong> ₱12,500.00</p>
+  </section>
+
+  <section class="attendance">
+    <h2>Attendance & QR Code System</h2>
+
+    <div id="qrCode"></div>
+    <p>Scan this QR code to check in/out</p>
+
+    <button id="attendanceBtn">Check In</button>
+
+    <div class="attendance-log" id="attendanceLog">
+      <h3>Attendance Log:</h3>
+      <!-- Logs will appear here -->
+    </div>
+  </section>
+
+  <!-- QRCode.js library CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+  <script>
+    // Simulate worker ID
+    const workerId = 'worker-juan-001';
+
+    // Generate QR code with the workerId as data
+    const qrCodeContainer = document.getElementById('qrCode');
+    QRCode.toCanvas(workerId, { width: 160 }, function (error, canvas) {
+      if (error) console.error(error);
+      qrCodeContainer.appendChild(canvas);
+    });
+
+    // Attendance logic
+    const attendanceBtn = document.getElementById('attendanceBtn');
+    const attendanceLog = document.getElementById('attendanceLog');
+    let checkedIn = false; // track if worker is checked in
+
+    attendanceBtn.addEventListener('click', () => {
+      const now = new Date();
+      const timeString = now.toLocaleString();
+
+      if (!checkedIn) {
+        // Check In
+        const p = document.createElement('p');
+        p.textContent = `✅ Checked In at ${timeString}`;
+        attendanceLog.appendChild(p);
+        attendanceBtn.textContent = 'Check Out';
+        checkedIn = true;
+      } else {
+        // Check Out
+        const p = document.createElement('p');
+        p.textContent = `🛑 Checked Out at ${timeString}`;
+        attendanceLog.appendChild(p);
+        attendanceBtn.textContent = 'Check In';
+        checkedIn = false;
+      }
+
+      // Scroll log to bottom
+      attendanceLog.scrollTop = attendanceLog.scrollHeight;
+    });
+  </script>
+  <script>
+  // Existing QR code and attendance logic...
+
+  function logout() {
+    const confirmLogout = confirm("Are you sure you want to logout?");
+    if (confirmLogout) {
+      // Clear simulated session data (if you have any)
+      localStorage.removeItem('loggedInWorker');
+      sessionStorage.removeItem('loggedInWorker');
+
+      // Redirect to login page (replace 'login.html' with your actual login page)
+      window.location.href = 'log in.html';
+    }
+  }
+</script>
+<div style="text-align: right; margin-bottom: 20px;">
+  <button class="logoutBtn" type="button" onclick="window.location.href='index.html'"
+    background-color: #7eff4b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  > Log Out
+   </button>
+</div>
+ </body>
+ </html> 
