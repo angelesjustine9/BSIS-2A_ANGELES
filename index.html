@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mang Inasal Worker Registration</title>
+</head>
+<body>
+  <style>
+    body {
+      background-image: url('ok.webp');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      font-family: Arial, sans-serif;
+      background-color: #baffb4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .registration-form {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .registration-form h2 {
+      text-align: center;
+      color: #31d300;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .password-toggle {
+      margin-top: 5px;
+      font-size: 13px;
+      cursor: pointer;
+      color: #007b00;
+      text-decoration: underline;
+    }
+
+    button {
+      width: 100%;
+      background-color: #31d300;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #60e622;
+    }
+  </style>
+</head>
+<body>
+  <form class="registration-form" id="workerForm">
+    <h2>Mang Inasal Worker Registration</h2>
+
+    <div class="form-group">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" name="fullname" required placeholder="Juan Dela Cruz" />
+    </div>
+
+    <div class="form-group">
+      <label for="contact">Contact Number</label>
+      <input type="tel" id="contact" name="contact" required placeholder="09XXXXXXXXX" pattern="[0-9]{11}" />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address (optional)</label>
+      <input type="email" id="email" name="email" placeholder="example@mail.com" />
+    </div>
+
+    <div class="form-group">
+      <label for="position">Position</label>
+      <select id="position" name="position" required>
+        <option value="">Select Position</option>
+        <option value="crew">Crew</option>
+        <option value="cashier">Cashier</option>
+        <option value="cook">Cook</option>
+        <option value="supervisor">Supervisor</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required placeholder="Enter username" />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required placeholder="Enter a secure password" />
+      <span class="password-toggle" onclick="togglePassword()">Show Password</span>
+    </div>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const toggleText = document.querySelector('.password-toggle');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleText.textContent = 'Hide Password';
+      } else {
+        passwordInput.type = 'password';
+        toggleText.textContent = 'Show Password';
+      }
+    }
+
+    document.getElementById('workerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const fullname = this.fullname.value.trim();
+      const contact = this.contact.value.trim();
+      const email = this.email.value.trim();
+      const position = this.position.value;
+      const username = this.username.value.trim();
+      const password = this.password.value;
+
+      if (!fullname || !contact || !position || !username || !password) {
+        alert('Please fill out all required fields.');
+        return;
+      }
+
+      const registrationData = {
+        fullname,
+        contact,
+        email,
+        position,
+        username,
+        password
+      };
+
+      let registrations = JSON.parse(localStorage.getItem('registrations')) || [];
+      registrations.push(registrationData);
+      localStorage.setItem('registrations', JSON.stringify(registrations));
+
+      alert(`Registered Successfully!\n\nName: ${fullname}\nContact: ${contact}\nUsername: ${username}`);
+
+      this.reset();
+
+      // Redirect to login
+      window.location.href = 'log in.html';
+    });
+  </script>
+</body>
+</html>
