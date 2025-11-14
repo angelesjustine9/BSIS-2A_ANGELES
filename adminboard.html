@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background-color: #31d300;
+      color: white;
+      padding: 20px 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar h2 {
+      margin-bottom: 30px;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .nav-link {
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      padding: 20px 30px;
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .main-header h1 {
+      font-size: 26px;
+      color: #333;
+    }
+
+    .btn-logout {
+      background-color: #ff4b5c;
+      color: white;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-logout:hover {
+      background-color: #e04352;
+    }
+
+    /* Table */
+    .table-container {
+      overflow-x: auto;
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #31d300;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .btn-delete {
+      background-color: red;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .btn-delete:hover {
+      background-color: darkred;
+    }
+
+    .btn-toggle {
+      background-color: #31d300;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-toggle:hover {
+      background-color: #28a000;
+    }
+
+    .no-data {
+      text-align: center;
+      margin-top: 40px;
+      color: #777;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+
+      .main {
+        padding: 15px;
+      }
+
+      th, td {
+        padding: 8px 10px;
+      }
+
+      .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="#" class="nav-link">Dashboard</a>
+    <a href="#" class="nav-link">Workers</a>
+    <a href="#" class="nav-link">Settings</a>
+    <a href="#" class="nav-link" onclick="logout()">Logout</a>
+  </aside>
+
+  <main class="main">
+    <div class="main-header">
+      <h1>Registered Workers</h1>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="table-container" id="tableContainer"></div>
+  </main>
+
+  <script>
+    function loadRegistrations() {
+      const data = JSON.parse(localStorage.getItem('registrations')) || [];
+
+      if (data.length === 0) {
+        document.getElementById('tableContainer').innerHTML = '<p class="no-data">No registrations found.</p>';
+        return;
+      }
+
+      let tableHTML = '<table>';
+      tableHTML += `
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Position</th>
+            <th>Availability</th>
+            <th>Start Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+
+      data.forEach((entry, index) => {
+        tableHTML += `
+          <tr>
+            <td>${entry.fullname}</td>
+            <td>${entry.contact}</td>
+            <td>${entry.email}</td>
+            <td>${entry.position}</td>
+            <td>${entry.availability}</td>
+            <td>${entry.startdate}</td>
+            <td>${entry.status || 'Out'}</td>
+            <td>
+              <button class="btn-delete" onclick="deleteEntry(${index})">Delete</button>
+              <button class="btn-toggle" onclick="toggleStatus(${index})">${entry.status === 'In' ? 'Out' : 'In'}</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      tableHTML += '</tbody></table>';
+      document.getElementById('tableContainer').innerHTML = tableHTML;
+    }
+
+    function deleteEntry(index) {
+      if (!confirm('Are you sure you want to delete this entry?')) return;
+      let data = JSON.parse(localStorage.getItem('registrations')) || [];
+      data.splice(index, 1);
+      localStorage.setItem('registrations', JSON.stringify(data));
+      loadRegistrations();
+    }
+
+    function toggleStatus(index) {
+      let data = JSON.parse(localStorage.getItem('registrations')) || [];
+      if (!data[index]) return;
+      data[index].status = data[index].status === 'In' ? 'Out' : 'In';
+      localStorage.setItem('registrations', JSON.stringify(data));
+      loadRegistrations();
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        window.location.href = 'admin.html';
+      }
+    }
+
+    window.onload = loadRegistrations;
+  </script>
+</body>
+</html>
